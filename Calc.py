@@ -2,27 +2,35 @@ str_command = input("Please type command a+b or a-b: ")
 
 str_A = ''
 str_B = ''
+
+znak_A = ''
+znak_B = ''
+
 operation = ''
 
-for letter in str_command:
-    print(letter)
-    if letter == '+' or letter == '-' or letter == '*' or letter == '/' or letter == '^':
-        operation = letter
+i = 0
+
+while i < len(str_command) :
+    if str_command[i] == '+' or str_command[i] == '-' or str_command[i] == '*' or str_command[i] == '/' or str_command[i] == '^' :
+        if str_A == '': 
+            znak_A = str_command[i]
+        elif operation != '':
+            znak_B = str_command[i]
+        else:
+            operation = str_command[i]
     else:
         if operation == '':
-            str_A = str_A + letter
-        else: 
-            str_B = str_B + letter
+            str_A += str_command[i]
+        else:
+            str_B += str_command[i]
+    i += 1
+    
 
-str_A = str_A.strip()
-str_B = str_B.strip()
-print(str_A)
-print(str_B)
  
-delimoe = float(str_A)
+delimoe = float(znak_A + str_A)
 #print(type(a))
 
-delitel = float(str_B)
+delitel = float(znak_B + str_B)
 #print(type(b))
 
 if operation == '/':
