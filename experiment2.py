@@ -1,119 +1,79 @@
-str_command = input("Введите выражение: ").replace(' ', '')
 
-variables = ['']
-operations = []
-stroka = []
-stek1 = list([])
-stek2 = list([])
-x = float()
-y = float()
-operation = ''
-result = ''
-for i, letter in enumerate(str_command):
-    if letter in '+-*/^' and (i > 0) and variables[len(operations)] != '':
-        operations.append(letter)
-        variables.append('')
-    else:
-        index = len(operations)
-        variables[index] = variables[index] + letter
+supported_ops = ('+-*/^')
+
+ops = {'+':2, '-':2, '/':1, '*':1, '^':0}
+
+INPUT = input("Введите выражение: ").replace(' ', '')
+
+stack = []
+OUTPUT = []
+digit = False
 
 
 
-
-for i in range(max(len(variables), len(operations))):
-    if i < len(variables):
-        stroka.append(variables[i])
-    if i < len(operations):
-        stroka.append(operations[i])
-
-#приоритеты
-hp_ops = tuple('^')
-mp_ops = tuple('*/')
-lp_ops = ('+', '-')
-#калькулятор
-
-def top(stek2):
-    return stek2[len(stek2)-1]
-
-for i in range(len(stroka)):
-    if stroka[i] not in '+-*/^':
-        print(stroka[i])
-        stek1.append(stroka[i])
-    else:
-        if stroka[i] in '+-*/^' and stek2 == []:
-            stek2.append(stroka[i])
+for i in INPUT:
+    
+    if i in '0123456789':
+        if len(OUTPUT) == 0:
+            OUTPUT = [i] + OUTPUT
         else:
-            if stek2 != []:
-                if stroka[i] in hp_ops and top(stek2) in lp_ops:
-                    stek2 = stek2.append(stroka[i])
-                elif stroka[i] in hp_ops and top(stek2) in mp_ops:
-                    stek2 = stek2.append(stroka[i])
-                elif stroka[i] in hp_ops and top(stek2) in hp_ops:
-                    x = stek1.pop()
-                    y = stek1.pop()
-                    operation = stek2.pop()
-                    x = float(x)
-                    y = float(y)
-                    result = y**x
-                    stek1.append(result)
-                    stek2.append(stroka[i])
-                elif stroka[i] in mp_ops and (top(stek2) in hp_ops or top(stek2) in mp_ops):
-                    operations = stek2.pop()
-                    x = stek1.pop()
-                    y = stek1.pop()
-                    x = float(x)
-                    y = float(y)
-                    stek2.append(stroka[i])
-                    if operation == '/':
-                        result = y / x
-                        stek1.append(result)
-                    elif operation == '*':
-                        result = y * x
-                        stek1.append(result)
-                elif stroka[i] in mp_ops and top(stek2) in lp_ops:
-                    stek2.append(stroka[i])
-                elif stroka[i] in lp_ops and (top(stek2) in lp_ops or top(stek2) in mp_ops or top(stek2) in hp_ops):
-                    operation = stek2.pop()
-                    x = stek1.pop()
-                    y = stek1.pop()
-                    x = float(x)
-                    y = float(y)
-                    stek2.append(stroka[i])
-                    if operation == '+':
-                        result = y + x
-                        stek1.append(result)
-                    elif operation == '-':
-                        result = y - x
-                        stek1.append(result)
+            if OUTPUT[0][-1] in '0123456789' and digit: OUTPUT[0] += i
+            else: OUTPUT = [i] + OUTPUT
+        digit = True
+    else: digit = False
+    
+    if i == '(':
+        stack = [i] + stack
+    
+    if i == ')':
+        while stack != [] and stack[0] != '(': OUTPUT, stack = [stack[0]] + OUTPUT, stack[1:]
+        if stack != [] and stack[0] == '(': stack = stack[1:]
+    
+    if i in ops:
+        while stack != [] and stack[0] in ops and ops[i] >= ops[stack[0]]: OUTPUT, stack = [stack[0]] + OUTPUT, stack[1:]
+        stack = [i] + stack
 
-i = 0
-i = int(i)
-if stek2 != []:
-    while i < len(stek2):
-        x = stek1.pop()
-        y = stek1.pop()
-        x = float(x)
-        y = float(y)
-        operation = stek2.pop()
-        if operation == '/':
-            if x == 0:
-                result = 'Inf'
-            else:
-                result = y / x
-                stek1.append(result)
-        elif operation == '+':
-            result = y + x
-            stek1.append(result)
-        elif operation == '-':
-            result = y - x
-            stek1.append(result)
-        elif operation == '*':
-            result = y * x
-            stek1.append(result)
-        elif operation == '^':
-            result = y ** x
-            stek1.append(result)
+while stack != []: OUTPUT, stack = [stack[0]] + OUTPUT, stack[1:]
+
+print('инфиксная запись:\t%s' % (INPUT))
+print('постфиксная запись:\t%s' % (" ".join(reversed(OUTPUT))))
+OUTPUT = " ".join(reversed(OUTPUT))
+print(OUTPUT)
+
+# выражение 2+2*2 в польской 222*+, считаем:
+
+'''
+выражение l = 222*+ - OUTPUT     range {0, 1 , 2, 3, 4}
+          i = 01234
+'''
+
+
+polskiu = []
+
+for i in OUTPUT.split():
+    if i == '*':
+        g = polskiu.pop()
+        z = polskiu.pop()
+        polskiu.append(g * z)
+    elif i == '-':
+        g = polskiu.pop()
+        z = polskiu.pop()
+        polskiu.append(z - g)
+    elif i == '+':
+        g = polskiu.pop()
+        z = polskiu.pop()
+        polskiu.append(g + z)
+    elif i == '^':
+        g = polskiu.pop()
+        z = polskiu.pop()
+        polskiu.append(z ** g)
+    elif i == '/':
+        g = polskiu.pop()
+        z = polskiu.pop()
+        if g == 0:
+            print("На ноль делить нельзя")
         else:
-            result = "Unknown"
-print(stek1)
-print(stek2)
+            polskiu.append(z / g)
+    else:
+        polskiu.append(int(i))
+print("Результат: " + str(polskiu[0]))
