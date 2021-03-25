@@ -9,6 +9,7 @@ INPUT = input("Введите выражение: ").replace(' ', '')
 stack = []
 OUTPUT = []
 digit = False
+prov = INPUT
 INPUT = list(INPUT)
 result = ''
 variables = ['']
@@ -18,7 +19,8 @@ oper = []
 operand = []
 stroka = []
 # 2+sqrt2 = 2+2^0.5
-
+print(variables)
+print(operations)
 for i, letter in enumerate(INPUT):
     if letter in '+-*/^' and (i > 0) and variables[len(operations)] != '':
         operations.append(letter)
@@ -27,6 +29,10 @@ for i, letter in enumerate(INPUT):
         index = len(operations)
         variables[index] = variables[index] + letter
 
+print(variables)
+print(operations)
+
+
 
 for i in range(max(len(variables), len(operations))):
     if i < len(variables):
@@ -34,45 +40,36 @@ for i in range(max(len(variables), len(operations))):
     if i < len(operations):
         stroka.append(operations[i])
 
+print(stroka)
 
 for i, l in enumerate(stroka):
     if 'sqrt' in l and '-' in l:
         oper.append('-(' + stroka[i].split('sqrt').pop())
         oper.append('0.5)')
-        operand.append('^')
-       
+        operand.append('^')       
     elif 'sqrt' in l:
         oper.append(stroka[i].split('sqrt').pop())
         oper.append(0.5)
         operand.append('^')
     elif 'sin' in l:
-        if '-' in l:
-            oper.append(stroka[i].split('sin').pop())
-            b = float(oper.pop())
-            c = str(0 - math.sin(b))
-            oper.append(c)
-        else:
-            oper.append(stroka[i].split('sin').pop())
-            b = float(oper.pop())
-            c = str(math.sin(b))
-            oper.append(c)
+        oper.append(stroka[i].split('sin').pop())
+        b = float(oper.pop())
+        c = str(math.sin(b))
+        oper.append(c)
     elif 'cos' in l:
-        if '-' in l:
-            oper.append(stroka[i].split('cos').pop())
-            b = float(oper.pop())
-            c = str(0 - math.cos(b))
-            oper.append(c)
-        else:
-            oper.append(stroka[i].split('cos').pop())
-            b = float(oper.pop())
-            c = str(math.cos(b))
-            oper.append(c)
+        oper.append(stroka[i].split('cos').pop())
+        b = float(oper.pop())
+        c = str(math.cos(b))
+        oper.append(c)
     else:
-        if l in '0123456789.' or ('-' in str(l) and ('1' in str(l) or '2' in str(l) or '3' in str(l) or '4' in str(l) or '5' in str(l) or '6' in str(l) or '7' in str(l) or '8' in str(l) or '9' in str(l))):
+        if ('-' in str(l) and ('1' in str(l) or '2' in str(l) or '3' in str(l) or '4' in str(l) or '5' in str(l) or '6' in str(l) or '7' in str(l) or '8' in str(l) or '9' in str(l))) or ('1' in str(l) or '2' in str(l) or '3' in str(l) or '4' in str(l) or '5' in str(l) or '6' in str(l) or '7' in str(l) or '8' in str(l) or '9' in str(l)):
             oper.append(l)
         else:
             operand.append(l)
 
+
+print(oper)
+print(operand)
 stroka.clear()
 
 
@@ -82,7 +79,7 @@ for i in range(max(len(oper), len(operand))):
     if i < len(operand):
         stroka.append(str(operand[i]))
 
-
+print(stroka)
 
 for i, l in enumerate(stroka):
     if '-' in str(l) and ('1' in str(l) or '2' in str(l) or '3' in str(l) or '4' in str(l) or '5' in str(l) or '6' in str(l) or '7' in str(l) or '8' in str(l) or '9' in str(l)):
@@ -90,6 +87,11 @@ for i, l in enumerate(stroka):
 
 
 INPUT = ''.join(stroka)
+
+
+print(INPUT)
+
+
 
 
 for i in INPUT:
@@ -116,12 +118,25 @@ for i in INPUT:
 
 while stack != []: OUTPUT, stack = [stack[0]] + OUTPUT, stack[1:]
 
+print('инфиксная запись:\t%s' % (INPUT))
+print('постфиксная запись:\t%s' % (" ".join(reversed(OUTPUT))))
+print(OUTPUT)
 
 for i, l in enumerate(OUTPUT):
     if '^' in str(l) and '^' in str(OUTPUT[i+2]):
         OUTPUT[i+1], OUTPUT[i+2] = OUTPUT[i+2], OUTPUT[i+1]
 
 OUTPUT = " ".join(reversed(OUTPUT))
+print(OUTPUT)
+
+
+
+# выражение 2+2*2 в польской 222*+, считаем:
+
+'''
+выражение l = 222*+ - OUTPUT     range {0, 1 , 2, 3, 4}
+          i = 01234
+'''
 
 
 polskiu = []
@@ -139,9 +154,6 @@ for i in OUTPUT.split():
         g = float(polskiu.pop())
         z = float(polskiu.pop())
         polskiu.append(g + z)
-    elif i == 'sqrt':
-        g = polskiu.pop()
-        polskiu.append(g ** 0.5)
     elif i == '^':
         g = float(polskiu.pop())
         z = float(polskiu.pop())
