@@ -36,7 +36,7 @@ print(stroka)
 
 for i, l in enumerate(stroka):
     if '-' in str(l) and ('1' in str(l) or '2' in str(l) or '3' in str(l) or '4' in str(l) or '5' in str(l) or '6' in str(l) or '7' in str(l) or '8' in str(l) or '9' in str(l)):
-        stroka[i] = str('0' + stroka[i])
+        stroka[i] = str('(0' + stroka[i] + ')')
 
 
 INPUT = ''.join(stroka)
@@ -69,15 +69,14 @@ while stack != []: OUTPUT, stack = [stack[0]] + OUTPUT, stack[1:]
 
 print('инфиксная запись:\t%s' % (INPUT))
 print('постфиксная запись:\t%s' % (" ".join(reversed(OUTPUT))))
+
+for i, l in enumerate(OUTPUT):
+    if '^' in str(l) and '^' in str(OUTPUT[i+2]):
+        OUTPUT[i+1], OUTPUT[i+2] = OUTPUT[i+2], OUTPUT[i+1]
+
 OUTPUT = " ".join(reversed(OUTPUT))
 print(OUTPUT)
 
-# выражение 2+2*2 в польской 222*+, считаем:
-
-'''
-выражение l = 222*+ - OUTPUT     range {0, 1 , 2, 3, 4}
-          i = 01234
-'''
 
 
 polskiu = []
