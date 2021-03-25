@@ -1,7 +1,8 @@
-﻿
+﻿import math
+
 supported_ops = ('+-*/^sqrt')
 
-ops = {'+':2, '-':2, '/':1, '*':1, '^':0, 'sqrt':0}
+ops = {'+':2, '-':2, '/':1, '*':1, '^':0}
 
 INPUT = input("Введите выражение: ").replace(' ', '')
 
@@ -11,9 +12,12 @@ digit = False
 INPUT = list(INPUT)
 result = ''
 variables = ['']
+variables1 = []
 operations = []
+oper = []
+operand = []
 stroka = []
-
+# 2+sqrt2 = 2+2^0.5
 
 for i, letter in enumerate(INPUT):
     if letter in '+-*/^' and (i > 0) and variables[len(operations)] != '':
@@ -23,8 +27,6 @@ for i, letter in enumerate(INPUT):
         index = len(operations)
         variables[index] = variables[index] + letter
 
-print(variables)
-print(operations)
 
 for i in range(max(len(variables), len(operations))):
     if i < len(variables):
@@ -32,7 +34,43 @@ for i in range(max(len(variables), len(operations))):
     if i < len(operations):
         stroka.append(operations[i])
 
-print(stroka)
+
+for i, l in enumerate(stroka):
+    if 'sqrt' in l and '-' in l:
+        oper.append('-(' + stroka[i].split('sqrt').pop())
+        oper.append('0.5)')
+        operand.append('^')
+       
+    elif 'sqrt' in l:
+        oper.append(stroka[i].split('sqrt').pop())
+        oper.append(0.5)
+        operand.append('^')
+    elif 'sin' in l:
+        oper.append(stroka[i].split('sin').pop())
+        b = float(oper.pop())
+        c = str(math.sin(b))
+        oper.append(c)
+    elif 'cos' in l:
+        oper.append(stroka[i].split('cos').pop())
+        b = float(oper.pop())
+        c = str(math.cos(b))
+        oper.append(c)
+    else:
+        if l in '0123456789.' or ('-' in str(l) and ('1' in str(l) or '2' in str(l) or '3' in str(l) or '4' in str(l) or '5' in str(l) or '6' in str(l) or '7' in str(l) or '8' in str(l) or '9' in str(l))):
+            oper.append(l)
+        else:
+            operand.append(l)
+
+stroka.clear()
+
+
+for i in range(max(len(oper), len(operand))):
+    if i < len(oper):
+        stroka.append(str(oper[i]))
+    if i < len(operand):
+        stroka.append(str(operand[i]))
+
+
 
 for i, l in enumerate(stroka):
     if '-' in str(l) and ('1' in str(l) or '2' in str(l) or '3' in str(l) or '4' in str(l) or '5' in str(l) or '6' in str(l) or '7' in str(l) or '8' in str(l) or '9' in str(l)):
@@ -42,7 +80,6 @@ for i, l in enumerate(stroka):
 INPUT = ''.join(stroka)
 
 
-print(INPUT)
 for i in INPUT:
     
     if i in '0123456789.':
@@ -67,16 +104,12 @@ for i in INPUT:
 
 while stack != []: OUTPUT, stack = [stack[0]] + OUTPUT, stack[1:]
 
-print('инфиксная запись:\t%s' % (INPUT))
-print('постфиксная запись:\t%s' % (" ".join(reversed(OUTPUT))))
 
 for i, l in enumerate(OUTPUT):
     if '^' in str(l) and '^' in str(OUTPUT[i+2]):
         OUTPUT[i+1], OUTPUT[i+2] = OUTPUT[i+2], OUTPUT[i+1]
 
 OUTPUT = " ".join(reversed(OUTPUT))
-print(OUTPUT)
-
 
 
 polskiu = []
