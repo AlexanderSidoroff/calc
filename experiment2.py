@@ -46,15 +46,27 @@ for i, l in enumerate(stroka):
         oper.append(0.5)
         operand.append('^')
     elif 'sin' in l:
-        oper.append(stroka[i].split('sin').pop())
-        b = float(oper.pop())
-        c = str(math.sin(b))
-        oper.append(c)
+        if '-' in l:
+            oper.append(stroka[i].split('sin').pop())
+            b = float(oper.pop())
+            c = str(0 - math.sin(b))
+            oper.append(c)
+        else:
+            oper.append(stroka[i].split('sin').pop())
+            b = float(oper.pop())
+            c = str(math.sin(b))
+            oper.append(c)
     elif 'cos' in l:
-        oper.append(stroka[i].split('cos').pop())
-        b = float(oper.pop())
-        c = str(math.cos(b))
-        oper.append(c)
+        if '-' in l:
+            oper.append(stroka[i].split('cos').pop())
+            b = float(oper.pop())
+            c = str(0 - math.cos(b))
+            oper.append(c)
+        else:
+            oper.append(stroka[i].split('cos').pop())
+            b = float(oper.pop())
+            c = str(math.cos(b))
+            oper.append(c)
     else:
         if l in '0123456789.' or ('-' in str(l) and ('1' in str(l) or '2' in str(l) or '3' in str(l) or '4' in str(l) or '5' in str(l) or '6' in str(l) or '7' in str(l) or '8' in str(l) or '9' in str(l))):
             oper.append(l)
