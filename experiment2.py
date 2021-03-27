@@ -18,7 +18,14 @@ operations = []
 oper = []
 operand = []
 stroka = []
-# 2+sqrt2 = 2+2^0.5
+
+def spis(x, y):
+    for i in range(max(len(x), len(y))):
+        if i < len(x):
+            stroka.append(x[i])
+        if i < len(y):
+            stroka.append(y[i])
+    return stroka
 
 for i, letter in enumerate(INPUT):
     if letter in '+-*/^' and (i > 0) and variables[len(operations)] != '':
@@ -30,11 +37,7 @@ for i, letter in enumerate(INPUT):
 
 
 
-for i in range(max(len(variables), len(operations))):
-    if i < len(variables):
-        stroka.append(variables[i])
-    if i < len(operations):
-        stroka.append(operations[i])
+spis(variables, operations)
 
 
 for i, l in enumerate(stroka):
@@ -64,13 +67,7 @@ for i, l in enumerate(stroka):
 
 stroka.clear()
 
-
-for i in range(max(len(oper), len(operand))):
-    if i < len(oper):
-        stroka.append(str(oper[i]))
-    if i < len(operand):
-        stroka.append(str(operand[i]))
-
+spis(oper, operand)
 
 for i, l in enumerate(stroka):
     if '-' in str(l) and ('1' in str(l) or '2' in str(l) or '3' in str(l) or '4' in str(l) or '5' in str(l) or '6' in str(l) or '7' in str(l) or '8' in str(l) or '9' in str(l)):
