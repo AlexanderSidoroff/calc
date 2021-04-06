@@ -13,11 +13,6 @@ def getfromfile(file_name: str):
         line = f.readline()
     return line
     
-'''
-def writeinfile('output.txt': str):
-    with open('output.txt', 'w') as f:
-        f.writelines(command)
-'''
 
 import sys
 if len(sys.argv) <= 1:
