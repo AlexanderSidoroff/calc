@@ -19,8 +19,10 @@ import telebot
 # 13. В конце месяца счетчик сбрасывается
 
 
-
+'''
 Библиотеки: 
-1. python-telegram-bot
+1. pytelegrambotAPI
 2. Request ???
 '''
+
+#
