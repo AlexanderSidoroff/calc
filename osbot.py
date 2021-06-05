@@ -4,7 +4,7 @@
 '''
 import requests
 import telebot
-
+import gspread
 # 1. Пассажир пишет отзыв, и его отзыв попадает на некоторый сервер аэропорта.
 # 2. Чат бот, сразу после поступления отзыва, на вход получает отзыв с сервера куда поступают все отзывы. 
 # 3. Чат бот выделяет ФИО и контактные данные пассажира в отдельную переменную. 
@@ -19,15 +19,24 @@ import telebot
 # 12. В конце месяца начальнику отдела приходит сообщение от бота в котором прописано сколько отзывов обработал каждый сотрудник. 
 # 13. В конце месяца счетчик сбрасывается
 
-
-'''
-Библиотеки: 
-1. pytelegrambotAPI
-2. Request ???
-'''
-
-import gspread
+# Создал бота, токен скрыл
+from secret import TOKEN, ID
+print(TOKEN)
+print(ID)
+bot = telebot.TeleBot(TOKEN, parse_mode=None)
+#bot.send_message(ID, "Здраствуйте, чем я могу Вам помочь?")
 # Создал сервис аккаунт на гугл для доступа к таблице
+'''
+name = 'Олег Владимирович'
+contact = '+79992177021'
+message = 'Классный сервис'
+sms = str('Имя клиента: ' + str(name) + '\nКонтакт: ' + str(contact) + '\nОбращение: ' + str(message))
+bot.send_message(ID, str(sms))
+'''
+
+
+
+
 gc = gspread.service_account()
 
 sh = gc.open("Прототип канала ОС для теста (Ответы)")
@@ -54,12 +63,15 @@ if count > obr:
     for j in range(1, new + 1):       # цикл по вытаскиванию информации из ячеек
         name = sh.sheet1.get('B' + str(count))
         contact = str(sh.sheet1.get('E' + str(count)) + sh.sheet1.get('J' + str(count)))
-        mail = str(sh.sheet1.get('G' + str(count)) + sh.sheet1.get('H' + str(count)) + sh.sheet1.get('I' + str(count)))
+        message = str(sh.sheet1.get('G' + str(count)) + sh.sheet1.get('H' + str(count)) + sh.sheet1.get('I' + str(count)))
         '''
         Вытаскиваем имя клиента из ячейки В
         Вытаскиваем контакт клиента из ячеек E и J
         Вытаскиваем обращение клиента из ячеек G, H, и I
-        Далее отправляем в телегу
         '''
+        # отправка сообщения в групповой чат
+        sms = str('Имя клиента: ' + str(name) + '\nКонтакт: ' + str(contact) + '\nОбращение: ' + str(message))
+        bot.send_message(ID, str(sms))
+        
 else:
     print('ничего нового нет')
